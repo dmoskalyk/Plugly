@@ -14,7 +14,12 @@ namespace Plugly.Tests.Data
 
         public virtual string GetFullName(string format)
         {
-            return string.Format(format, FirstName, LastName);
+            return string.Format(format, FirstName, GetMiddleName(), LastName);
+        }
+
+        protected virtual string GetMiddleName()
+        {
+            return null;
         }
 
         public virtual void CopyTo(Customer other, string suffix)

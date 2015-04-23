@@ -20,18 +20,18 @@ namespace Plugly.Tests
         public void MethodWithReturnValue_Default()
         {
             var customer = new Customer();
-            customer.GetFullName("{0} {1}").ShouldBe("first last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("first last");
         }
 
         [TestMethod]
         public void MethodWithReturnValue_Override()
         {
             customizer.Setup<Customer>()
-                .Override<string, string>(c => c.GetFullName(string.Empty), (c, format) => string.Format(format, c.LastName, c.FirstName))
+                .Override<string, string>(c => c.GetFullName(string.Empty), (c, format) => string.Format(format, c.LastName, null, c.FirstName))
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}").ShouldBe("last first");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("last first");
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace Plugly.Tests
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}").ShouldBe("Full name: first last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first last");
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace Plugly.Tests
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}").ShouldBe("Full name: first Last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first Last");
         }
 
         [TestMethod]
@@ -87,6 +87,23 @@ namespace Plugly.Tests
             
             result.FirstName.ShouldBe("f12");
             result.LastName.ShouldBe("l12");
+        }
+
+        [TestMethod]
+        public void ProtectedMethod_Override()
+        {
+            ProtectedCustomerMethods.Customize(customizer);
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.GetFullName("{0} {1}{2}").ShouldBe("first van last");
+        }
+
+        class ProtectedCustomerMethods : Customer
+        {
+            public static void Customize(Customizer customizer)
+            {
+                customizer.Setup<Customer>().Override(c => ((ProtectedCustomerMethods)c).GetMiddleName(), c => "van ");
+            }
         }
     }
 }
