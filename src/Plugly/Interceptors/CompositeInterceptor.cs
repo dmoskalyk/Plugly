@@ -11,7 +11,7 @@ namespace Plugly.Interceptors
         List<IInterceptor> list;
 
         [ThreadStatic]
-        static IEnumerator<IInterceptor> enumerator;
+        static Dictionary<CompositeInterceptor, IEnumerator<IInterceptor>> enumerators;
 
         public CompositeInterceptor()
         {
@@ -30,9 +30,8 @@ namespace Plugly.Interceptors
 
         public void Intercept(IInvocation invocation)
         {
-            bool start = enumerator == null;
-            if (start)
-                enumerator = list.GetEnumerator();
+            bool start;
+            var enumerator = GetEnumerator(out start);
             try
             {
                 if (enumerator.MoveNext())
@@ -43,8 +42,24 @@ namespace Plugly.Interceptors
             finally
             {
                 if (start)
-                    enumerator = null;
+                    enumerators.Remove(this);
             }
+        }
+
+        IEnumerator<IInterceptor> GetEnumerator(out bool start)
+        {
+            if (enumerators == null)
+                enumerators = new Dictionary<CompositeInterceptor, IEnumerator<IInterceptor>>();
+
+            start = false;
+            IEnumerator<IInterceptor> result;
+            if (!enumerators.TryGetValue(this, out result))
+            {
+                result = list.GetEnumerator();
+                enumerators.Add(this, result);
+                start = true;
+            }
+            return result;
         }
     }
 }
