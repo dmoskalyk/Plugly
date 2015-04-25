@@ -38,7 +38,7 @@ namespace Plugly
             var options = new ProxyGenerationOptions(hook) { Selector = selector };
             for (int i = 0; i < mixins.Count; i++)
             {
-                options.AddMixinInstance(mixins[i]);
+                options.AddMixinInstance(mixins[i]());
             }
             return options;
         }

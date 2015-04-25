@@ -45,6 +45,27 @@ namespace Plugly.Tests
             address.GetText().ShouldBe("Imaginationland, South Park, phone, street");
         }
 
+        [TestMethod]
+        public void ExtendWith_MixinNotShared()
+        {
+            customizer.Setup<Address>()
+                .ExtendWith<PhoneNumberExtension>();
+
+            var address1 = customizer.CreateInstance<Address>();
+            address1.ShouldBeAssignableTo<IPhoneNumberExtension>();
+
+            dynamic dyn = address1;
+            dyn.PhoneNumber = "my number";
+
+            var ext1 = (IPhoneNumberExtension)address1;
+            ext1.PhoneNumber.ShouldBe("my number");
+
+            var address2 = customizer.CreateInstance<Address>();
+            address2.ShouldNotBeSameAs(address1);
+            var ext2 = (IPhoneNumberExtension)address2;
+            ext2.PhoneNumber.ShouldNotBe("my number");
+        }
+
         class PhoneNumberExtension : IPhoneNumberExtension
         {
             public string PhoneNumber { get; set; }

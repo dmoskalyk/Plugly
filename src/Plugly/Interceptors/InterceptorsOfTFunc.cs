@@ -6,38 +6,38 @@ using System.Web;
 
 namespace Plugly.Interceptors
 {
-    sealed class FuncInterceptor<TOwner, TResult> : InterceptorBase<Func<TOwner, TResult>>
+    sealed class FuncInterceptor<TTarget, TResult> : InterceptorBase<Func<TTarget, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy);
+            invocation.ReturnValue = action((TTarget)invocation.Proxy);
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, TResult> : InterceptorBase<Func<TOwner, T1, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, TResult> : InterceptorBase<Func<TTarget, T1, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy, (T1)invocation.GetArgumentValue(0));
+            invocation.ReturnValue = action((TTarget)invocation.Proxy, (T1)invocation.GetArgumentValue(0));
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, TResult> : InterceptorBase<Func<TOwner, T1, T2, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, TResult> : InterceptorBase<Func<TTarget, T1, T2, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
             );
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -45,11 +45,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -58,11 +58,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -72,11 +72,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -87,11 +87,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -103,11 +103,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -120,11 +120,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -138,11 +138,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -157,11 +157,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -177,11 +177,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -198,11 +198,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -220,11 +220,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)
@@ -243,11 +243,11 @@ namespace Plugly.Interceptors
         }
     }
 
-    sealed class FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> : InterceptorBase<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>>
+    sealed class FuncInterceptor<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> : InterceptorBase<Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>>
     {
-        protected sealed override void Invoke(Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> action, IInvocation invocation)
+        protected sealed override void Invoke(Func<TTarget, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> action, IInvocation invocation)
         {
-            invocation.ReturnValue = action((TOwner)invocation.Proxy
+            invocation.ReturnValue = action((TTarget)invocation.Proxy
                 , (T1)invocation.GetArgumentValue(0)
                 , (T2)invocation.GetArgumentValue(1)
                 , (T3)invocation.GetArgumentValue(2)

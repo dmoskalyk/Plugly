@@ -9,6 +9,18 @@ namespace Plugly
 {
     class LinqHelper
     {
+        public static Func<object> MakeObjectFactory(Type type)
+        {
+            return (Func<object>)Expression.Lambda(Expression.New(type)).Compile();
+        }
+
+        public static Delegate RemapCalls(Type from, Type to, LambdaExpression expr)
+        {
+            var helper = new LinqHelper(from, to);
+            var newExpr = (LambdaExpression)helper.Convert(expr);
+            return newExpr.Compile();
+        }
+
         Type from;
         Type to;
 
@@ -19,13 +31,6 @@ namespace Plugly
             this.from = from;
             this.to = to;
             this.map = new Dictionary<Expression, Expression>();
-        }
-
-        public static Delegate RemapCalls(Type from, Type to, LambdaExpression expr)
-        {
-            var helper = new LinqHelper(from, to);
-            var newExpr = (LambdaExpression)helper.Convert(expr);
-            return newExpr.Compile();
         }
 
         T Process<T>(T expr)

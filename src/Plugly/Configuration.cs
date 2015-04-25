@@ -109,15 +109,15 @@ namespace Plugly
                 return null;
         }
 
-        public void AddMixin(Type type, object mixin)
+        public void AddMixin(Type type, Type mixin)
         {
             CheckNotSealed(type);
             registrations
                 .GetOrAdd(type, t => new TypeConfiguration())
-                .Mixins.Add(mixin);
+                .Mixins.Add(LinqHelper.MakeObjectFactory(mixin));
         }
 
-        public IList<object> GetMixins(Type type)
+        public IList<Func<object>> GetMixins(Type type)
         {
             TypeConfiguration config;
             if (registrations.TryGetValue(type, out config))
@@ -136,10 +136,10 @@ namespace Plugly
                 .Initialize(method, action);
         }
 
-        public void Add<TOwner>(Type type, MethodInfo method, Delegate action, bool isProtectedWithBaseMethod = false)
+        public void Add<TTarget>(Type type, MethodInfo method, Delegate action, bool isProtectedWithBaseMethod = false)
         {
             var parametersTypes = method.GetParameters().Select(p => p.ParameterType).ToList();
-            parametersTypes.Insert(0, typeof(TOwner));
+            parametersTypes.Insert(0, typeof(TTarget));
             Type interceptorType;
             if (method.ReturnType == typeof(void))
             {

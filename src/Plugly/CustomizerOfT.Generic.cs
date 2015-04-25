@@ -7,35 +7,35 @@ using System.Threading.Tasks;
 
 namespace Plugly
 {
-    public sealed partial class Customizer<TOwner>
+    public sealed partial class Customizer<TTarget>
     {
-        public Customizer<TOwner> OverrideUntyped(string method, Delegate with)
+        public Customizer<TTarget> OverrideUntyped(string method, Delegate with)
         {
             return OverrideUntyped(method, null, with);
         }
 
-        public Customizer<TOwner> OverrideUntyped(string method, Type[] types, Delegate with)
+        public Customizer<TTarget> OverrideUntyped(string method, Type[] types, Delegate with)
         {
-            var methodInfo = ownerType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
+            var methodInfo = targetType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
             if (methodInfo == null)
                 throw new ArgumentException("Method '" + method + "' not found.", "method");
-            config.Add<TOwner>(ownerType, methodInfo, with);
+            config.Add<TTarget>(targetType, methodInfo, with);
             return this;
         }
 
-        public Customizer<TOwner> ExtendWith<T>()
-            where T : class
+        public Customizer<TTarget> ExtendWith<TExtension>()
+            where TExtension : class
         {
-            return ExtendWith(typeof(T));
+            return ExtendWith(typeof(TExtension));
         }
 
-        public Customizer<TOwner> ExtendWith(Type extension)
+        public Customizer<TTarget> ExtendWith(Type extension)
         {
             if (!extension.IsAbstract && extension.GetConstructor(Type.EmptyTypes) != null)
             {
                 if (extension.GetInterfaces().Any(i => i.GetProperties().Length > 0))
                 {
-                    config.AddMixin(ownerType, Activator.CreateInstance(extension));
+                    config.AddMixin(targetType, extension);
                     CustomizeWith(extension);
                 }
                 else
@@ -63,22 +63,22 @@ namespace Plugly
                     continue;
 
                 var args = method.GetParameters();
-                if (!method.IsStatic || args.Length == 0 || !typeof(TOwner).IsAssignableFrom(args[0].ParameterType))
-                    throw new ArgumentException(string.Format("The customization method '{0}' must be static and have the first parameter of type derived from '{1}'.", method.Name, typeof(TOwner).FullName));
+                if (!method.IsStatic || args.Length == 0 || !typeof(TTarget).IsAssignableFrom(args[0].ParameterType))
+                    throw new ArgumentException(string.Format("The customization method '{0}' must be static and have the first parameter of type derived from '{1}'.", method.Name, typeof(TTarget).FullName));
 
                 if (method.Name == "__init")
                 {
                     if (args.Length > 1)
                         throw new ArgumentException("The '__init' method can have only one argument.");
                     var delegateType = typeof(Action<>).MakeGenericType(args[0].ParameterType);
-                    config.AddInitializer(ownerType, Delegate.CreateDelegate(delegateType, method));
+                    config.AddInitializer(targetType, Delegate.CreateDelegate(delegateType, method));
                 }
                 else
                 {
                     var targetMethodArgs = args.Skip(1).Select(a => a.ParameterType).ToArray();
-                    var targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, targetMethodArgs, null);
+                    var targetMethod = targetType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, targetMethodArgs, null);
                     if (targetMethod == null)
-                        targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.NonPublic, null, targetMethodArgs.Take(targetMethodArgs.Length - 1).ToArray(), null);
+                        targetMethod = targetType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.NonPublic, null, targetMethodArgs.Take(targetMethodArgs.Length - 1).ToArray(), null);
                     
                     if (targetMethod == null)
                         throw new MissingMethodException(string.Format("Cannot find method to customize: {0}({1})", method.Name, string.Join(",", targetMethodArgs.Select(a => a.FullName))));
@@ -96,7 +96,7 @@ namespace Plugly
                     var delegateType = (method.ReturnType == typeof(void)) ?
                         TypeHelper.GetActionDelegateType(args.Select(a => a.ParameterType).ToArray()) :
                         TypeHelper.GetFuncDelegateType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
-                    config.Add<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method), isProtectedWithBaseMethod);
+                    config.Add<TTarget>(targetType, targetMethod, Delegate.CreateDelegate(delegateType, method), isProtectedWithBaseMethod);
                 }
                 customized = true;
             }

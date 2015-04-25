@@ -8,34 +8,34 @@ using System.Threading.Tasks;
 
 namespace Plugly
 {
-    public sealed partial class Customizer<TOwner>
+    public sealed partial class Customizer<TTarget>
     {
         Customizer parent;
-        Type ownerType;
+        Type targetType;
         Configuration config;
 
-        internal Customizer(Customizer parent, Configuration config, Type ownerType)
+        internal Customizer(Customizer parent, Configuration config, Type targetType)
         {
             this.parent = parent;
             this.config = config;
-            this.ownerType = ownerType;
+            this.targetType = targetType;
         }
 
-        public Customizer<T> Setup<T>()
-            where T : class
+        public Customizer<TOther> Setup<TOther>()
+            where TOther : class
         {
-            return parent.Setup<T>();
+            return parent.Setup<TOther>();
         }
 
-        public Customizer<TOwner> BuildUp(bool shouldBuildUp)
+        public Customizer<TTarget> BuildUp(bool shouldBuildUp)
         {
-            config.SetBuildUp(ownerType, shouldBuildUp);
+            config.SetBuildUp(targetType, shouldBuildUp);
             return this;
         }
 
-        public Customizer<TOwner> InitializeWith(Action<TOwner> action)
+        public Customizer<TTarget> InitializeWith(Action<TTarget> action)
         {
-            config.AddInitializer(ownerType, action);
+            config.AddInitializer(targetType, action);
             return this;
         }
 

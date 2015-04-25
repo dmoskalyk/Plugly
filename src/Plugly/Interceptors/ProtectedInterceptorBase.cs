@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Plugly.Interceptors
 {
-    abstract class ProtectedInterceptorBase<TOwner, TAction, TBaseMethod> : InterceptorBase<TAction>
+    abstract class ProtectedInterceptorBase<TTarget, TAction, TBaseMethod> : InterceptorBase<TAction>
     {
         protected TBaseMethod baseMethod;
 
@@ -22,7 +22,7 @@ namespace Plugly.Interceptors
         static TBaseMethod CreateBaseMethodDelegate(MethodInfo methodInfo)
         {
             var args = methodInfo.GetParameters().Select(p => p.ParameterType).ToList();
-            args.Insert(0, typeof(TOwner));
+            args.Insert(0, typeof(TTarget));
             var parameters = args.Select(a => Expression.Parameter(a)).ToArray();
             return Expression.Lambda<TBaseMethod>(Expression.Call(parameters[0], methodInfo, parameters.Skip(1)), parameters).Compile();
         }

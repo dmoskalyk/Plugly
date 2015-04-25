@@ -8,26 +8,26 @@ using System.Threading.Tasks;
 
 namespace Plugly
 {
-    public sealed partial class Customizer<TOwner>
+    public sealed partial class Customizer<TTarget>
     {
-        public Customizer<TOwner> OverrideGetter<T>(Expression<Func<TOwner, T>> property, Func<TOwner, T> with)
+        public Customizer<TTarget> OverrideGetter<T>(Expression<Func<TTarget, T>> property, Func<TTarget, T> with)
         {
-            config.Add<TOwner>(ownerType, GetPropertyMethod(property, true), with); return this;
+            config.Add<TTarget>(targetType, GetPropertyMethod(property, true), with); return this;
         }
 
-        public Customizer<TOwner> OverrideSetter<T>(Expression<Func<TOwner, T>> property, Action<TOwner, T> with)
+        public Customizer<TTarget> OverrideSetter<T>(Expression<Func<TTarget, T>> property, Action<TTarget, T> with)
         {
-            config.Add<TOwner>(ownerType, GetPropertyMethod(property, false), with); return this;
+            config.Add<TTarget>(targetType, GetPropertyMethod(property, false), with); return this;
         }
 
-        public Customizer<TOwner> OverrideProtectedGetter<T>(string property, Func<TOwner, Func<T>, T> with)
+        public Customizer<TTarget> OverrideProtectedGetter<T>(string property, Func<TTarget, Func<T>, T> with)
         {
-            config.Add<TOwner>(ownerType, GetProtectedPropertyMethod(property, true), with, isProtectedWithBaseMethod: true); return this;
+            config.Add<TTarget>(targetType, GetProtectedPropertyMethod(property, true), with, isProtectedWithBaseMethod: true); return this;
         }
 
-        public Customizer<TOwner> OverrideProtectedSetter<T>(string property, Action<TOwner, T, Action<T>> with)
+        public Customizer<TTarget> OverrideProtectedSetter<T>(string property, Action<TTarget, T, Action<T>> with)
         {
-            config.Add<TOwner>(ownerType, GetProtectedPropertyMethod(property, false), with, isProtectedWithBaseMethod: true); return this;
+            config.Add<TTarget>(targetType, GetProtectedPropertyMethod(property, false), with, isProtectedWithBaseMethod: true); return this;
         }
 
         private MethodInfo GetPropertyMethod(LambdaExpression property, bool getter)
@@ -46,7 +46,7 @@ namespace Plugly
 
         private MethodInfo GetProtectedPropertyMethod(string property, bool getter)
         {
-            var propertyInfo = ownerType.GetProperty(property, BindingFlags.Instance | BindingFlags.NonPublic);
+            var propertyInfo = targetType.GetProperty(property, BindingFlags.Instance | BindingFlags.NonPublic);
             if (propertyInfo == null)
                 throw new ArgumentException(string.Format("Protected property '{0}' could not be found.", property));
 

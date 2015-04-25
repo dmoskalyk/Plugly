@@ -13,7 +13,7 @@ namespace Plugly
     {
         ConcurrentDictionary<string, IInterceptor[]> interceptors = new ConcurrentDictionary<string, IInterceptor[]>();
 
-        public List<object> Mixins = new List<object>();
+        public List<Func<object>> Mixins = new List<Func<object>>();
         public List<IInitializer> Initializers = new List<IInitializer>();
 
         public bool? BuildUp;
