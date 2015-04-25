@@ -17,10 +17,19 @@ namespace Plugly.Tests.Data
             return Country + ", " + City;
         }
 
+        protected virtual string ProtectedProperty { get; set; }
+
+        public string ProtectedPropertyWrapper
+        {
+            get { return ProtectedProperty; }
+            set { ProtectedProperty = value; }
+        }
+
         public Address()
         {
             this.Country = "Imaginationland";
             this.City = "South Park";
+            this.ProtectedProperty = "protected";
         }
 
         public void InvokeProtectedMethod()

@@ -24,6 +24,17 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
+        public void ProtectedPropertyGetterOverride()
+        {
+            customizer.Setup<Address>()
+                .OverrideProtectedGetter<string>("ProtectedProperty", (a, getter) => getter() + ".")
+                ;
+
+            var address = customizer.CreateInstance<Address>();
+            address.ProtectedPropertyWrapper.ShouldBe("protected.");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void PropertyGetterOverride_InvalidExpression()
         {
@@ -50,6 +61,17 @@ namespace Plugly.Tests
 
             var address = customizer.CreateInstance<Address>();
             address.Country.ShouldBe("Imaginationland!");
+        }
+
+        [TestMethod]
+        public void ProtectedPropertySetterOverride()
+        {
+            customizer.Setup<Address>()
+                .OverrideProtectedSetter<string>("ProtectedProperty", (a, value, setter) => setter(value + "!"))
+                ;
+
+            var address = customizer.CreateInstance<Address>();
+            address.ProtectedPropertyWrapper.ShouldBe("protected!");
         }
 
         [TestMethod]

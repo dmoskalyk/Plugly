@@ -24,7 +24,7 @@ namespace Plugly.Interceptors
             var args = methodInfo.GetParameters().Select(p => p.ParameterType).ToList();
             args.Insert(0, typeof(TOwner));
             var parameters = args.Select(a => Expression.Parameter(a)).ToArray();
-            return Expression.Lambda<TBaseMethod>(Expression.Call(parameters[0], methodInfo), parameters).Compile();
+            return Expression.Lambda<TBaseMethod>(Expression.Call(parameters[0], methodInfo, parameters.Skip(1)), parameters).Compile();
         }
     }
 }
