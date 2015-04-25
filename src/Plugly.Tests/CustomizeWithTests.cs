@@ -24,7 +24,7 @@ namespace Plugly.Tests
         public void CustomizeWith_Correct()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<CorrectCustomizations>()
+                .ExtendWith<CorrectCustomizations>()
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
@@ -37,11 +37,24 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
+        public void CustomizeWith_CorrectStatic()
+        {
+            customizer.Setup<Customer>()
+                .ExtendWith(typeof(CorrectStaticCustomizations))
+                ;
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.FirstName = "John";
+            customer.LastName = "Doe";
+            customer.GetFullName("{0} {1}{2}").ShouldBe("John Doe!");
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void CustomizeWith_NoAttribute()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<NoAttributeCustomizations>()
+                .ExtendWith<NoAttributeCustomizations>()
                 ;
         }
 
@@ -50,7 +63,7 @@ namespace Plugly.Tests
         public void CustomizeWith_NonStatic()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<NonStaticCustomizations>()
+                .ExtendWith<NonStaticCustomizations>()
                 ;
         }
 
@@ -59,7 +72,7 @@ namespace Plugly.Tests
         public void CustomizeWith_InvalidFirstArgument()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<InvalidFirstArgumentCustomizations>()
+                .ExtendWith<InvalidFirstArgumentCustomizations>()
                 ;
         }
 
@@ -68,7 +81,7 @@ namespace Plugly.Tests
         public void CustomizeWith_MissingMethod()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<MissingMethodCustomizations>()
+                .ExtendWith<MissingMethodCustomizations>()
                 ;
         }
 
@@ -77,7 +90,7 @@ namespace Plugly.Tests
         public void CustomizeWith_ArgumentCountMismatch()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<ArgumentCountMismatchCustomizations>()
+                .ExtendWith<ArgumentCountMismatchCustomizations>()
                 ;
         }
 
@@ -86,7 +99,7 @@ namespace Plugly.Tests
         public void CustomizeWith_ArgumentTypeMismatch()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<ArgumentTypeMismatchCustomizations>()
+                .ExtendWith<ArgumentTypeMismatchCustomizations>()
                 ;
         }
 
@@ -95,7 +108,7 @@ namespace Plugly.Tests
         public void CustomizeWith_NonPublicTargetMethod()
         {
             customizer.Setup<Customer>()
-                .CustomizeWith<NonPublicTargetMethodCustomizations>()
+                .ExtendWith<NonPublicTargetMethodCustomizations>()
                 ;
         }
 
@@ -112,6 +125,15 @@ namespace Plugly.Tests
             {
                 customer.CopyTo(other, suffix);
                 other.FirstName += "!";
+            }
+        }
+
+        static class CorrectStaticCustomizations
+        {
+            [Customization]
+            public static string GetFullName(Customer customer, string format)
+            {
+                return customer.GetFullName(format) + "!";
             }
         }
 

@@ -23,15 +23,38 @@ namespace Plugly
             return this;
         }
 
-        public Customizer<TOwner> CustomizeWith<TCustomizations>()
-            where TCustomizations : class
+        public Customizer<TOwner> ExtendWith<T>()
+            where T : class
         {
-            return CustomizeWith(typeof(TCustomizations));
+            return ExtendWith(typeof(T));
         }
 
-        public Customizer<TOwner> CustomizeWith(Type customizationsContainer)
+        public Customizer<TOwner> ExtendWith(Type extension)
         {
-            bool empty = true;
+            if (!extension.IsAbstract && extension.GetConstructor(Type.EmptyTypes) != null)
+            {
+                if (extension.GetInterfaces().Any(i => i.GetProperties().Length > 0))
+                {
+                    config.AddMixin(ownerType, Activator.CreateInstance(extension));
+                    CustomizeWith(extension);
+                }
+                else
+                {
+                    if (!CustomizeWith(extension))
+                        throw new ArgumentException("The provided type must contain at least one method marked with 'CustomizationAttribute' or implement at least one interface with at least one property.");
+                }
+            }
+            else
+            {
+                if (!CustomizeWith(extension))
+                    throw new ArgumentException("There are no customization methods marked with the 'CustomizationAttribute' in the provided type.");
+            }
+            return this;
+        }
+
+        bool CustomizeWith(Type customizationsContainer)
+        {
+            bool customized = false;
             var methods = customizationsContainer.GetMethods(
                 BindingFlags.DeclaredOnly | BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var method in methods)
@@ -55,11 +78,9 @@ namespace Plugly
                     TypeHelper.GetActionDelegateType(args.Length).MakeGenericType(args.Select(a => a.ParameterType).ToArray()) :
                     TypeHelper.GetFuncDelegateType(args.Length + 1).MakeGenericType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
                 config.AddUntyped<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method));
-                empty = false;
+                customized = true;
             }
-            if (empty)
-                throw new ArgumentException("There are no customization methods marked with the 'CustomizationAttribute' in the provided type.");
-            return this;
+            return customized;
         }
     }
 }

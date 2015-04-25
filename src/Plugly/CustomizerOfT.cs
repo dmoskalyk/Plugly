@@ -32,18 +32,6 @@ namespace Plugly
             return this;
         }
 
-        public Customizer<TOwner> ExtendWith<T>()
-            where T : class, new()
-        {
-            return ExtendWith(new T());
-        }
-
-        public Customizer<TOwner> ExtendWith(object mixin)
-        {
-            config.AddMixin(ownerType, mixin);
-            return this;
-        }
-
         private System.Reflection.MethodInfo GetMethod(LambdaExpression method)
         {
             var methodCall = method.Body as MethodCallExpression;
