@@ -63,6 +63,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MixinTests.cs" />
     <Compile Include="PropertyTests.cs" />
+    <Compile Include="ProtectedTests.cs" />
+    <Compile Include="TestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Plugly\Plugly.csproj">

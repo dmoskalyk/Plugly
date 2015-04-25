@@ -111,6 +111,7 @@ namespace Plugly
 
         public void AddMixin(Type type, object mixin)
         {
+            CheckNotSealed(type);
             registrations
                 .GetOrAdd(type, t => new TypeConfiguration())
                 .Mixins.Add(mixin);
@@ -128,6 +129,7 @@ namespace Plugly
         private void AddInner<TFunc, TInt>(Type type, MethodBase method, TFunc action)
             where TInt : InterceptorBase<TFunc>, new()
         {
+            CheckNotSealed(type);
             registrations
                 .GetOrAdd(type, t => new TypeConfiguration())
                 .AddInterceptor(method, new TInt())
@@ -153,6 +155,12 @@ namespace Plugly
                 var interceptorType = TypeHelper.GetFuncInterceptorType(paramTypesArray.Length).MakeGenericType(paramTypesArray);
                 addMethodInfo.MakeGenericMethod(actionType, interceptorType).Invoke(this, new object[] { type, method, action });
             }
+        }
+
+        private void CheckNotSealed(Type type)
+        {
+            if (type.IsSealed)
+                throw new InvalidOperationException("Cannot customize sealed class.");
         }
 
         #region Func registrations

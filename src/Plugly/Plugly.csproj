@@ -48,8 +48,8 @@
     <Compile Include="CustomizationAttribute.cs" />
     <Compile Include="Customizer.cs" />
     <Compile Include="CustomizerOfT.cs" />
-    <Compile Include="CustomizerOfT.Override.cs" />
-    <Compile Include="CustomizerOfT.OverrideProtected.cs" />
+    <Compile Include="CustomizerOfT.Public.cs" />
+    <Compile Include="CustomizerOfT.Protected.cs" />
     <Compile Include="CustomizerOfT.Generic.cs" />
     <Compile Include="DefaultTypeResolver.cs" />
     <Compile Include="LinqHelper.cs" />

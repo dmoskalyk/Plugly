@@ -10,16 +10,8 @@ using Shouldly;
 namespace Plugly.Tests
 {
     [TestClass]
-    public class InitializationTests
+    public class InitializationTests : TestsBase
     {
-        Customizer customizer;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            customizer = new Customizer();
-        }
-
         [TestMethod]
         public void InitializeInstance_NoProxy()
         {

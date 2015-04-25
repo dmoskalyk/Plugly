@@ -6,16 +6,8 @@ using Shouldly;
 namespace Plugly.Tests
 {
     [TestClass]
-    public class MethodOverrideTests
+    public class MethodOverrideTests : TestsBase
     {
-        Customizer customizer;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            customizer = new Customizer();
-        }
-
         [TestMethod]
         public void MethodWithReturnValue_Default()
         {
@@ -116,25 +108,6 @@ namespace Plugly.Tests
 
             var customer = customizer.CreateInstance<Customer>();
             customer.GetFullName("{0}").ShouldBe("overridden:first");
-        }
-
-        [TestMethod]
-        public void ProtectedMethod_Override()
-        {
-            ProtectedCustomerMethods.Customize(customizer.Setup<Customer>());
-
-            var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}{2}").ShouldBe("first van last");
-        }
-
-        class ProtectedCustomerMethods : Customer
-        {
-            public static void Customize(Customizer<Customer> customizer)
-            {
-                customizer
-                    .OverrideProtected<ProtectedCustomerMethods, string>(c => c.GetMiddleName(), c => "van " + c.GetMiddleName())
-                    ;
-            }
         }
     }
 }

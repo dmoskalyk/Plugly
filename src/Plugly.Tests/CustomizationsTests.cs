@@ -10,16 +10,8 @@ using Shouldly;
 namespace Plugly.Tests
 {
     [TestClass]
-    public class CustomizationsTests
+    public class CustomizationsTests : TestsBase
     {
-        Customizer customizer;
-
-        [TestInitialize]
-        public void TestInitialize()
-        {
-            customizer = new Customizer();
-        }
-
         [TestMethod]
         public void ExtendWith_Correct()
         {

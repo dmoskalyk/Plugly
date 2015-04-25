@@ -12,12 +12,8 @@ namespace Plugly
         Configuration config;
         ITypeResolver typeResolver;
 
-        internal Configuration Config
-        {
-            get { return config; }
-        }
-
-        public Customizer() : this(new DefaultTypeResolver())
+        public Customizer()
+            : this(new DefaultTypeResolver())
         {
         }
 
@@ -79,7 +75,7 @@ namespace Plugly
         public Customizer<T> Setup<T>()
             where T : class
         {
-            return new Customizer<T>(this, typeResolver.ResolveType(typeof(T)));
+            return new Customizer<T>(this, config, typeResolver.ResolveType(typeof(T)));
         }
     }
 }

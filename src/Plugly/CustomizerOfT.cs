@@ -14,10 +14,10 @@ namespace Plugly
         Type ownerType;
         Configuration config;
 
-        internal Customizer(Customizer parent, Type ownerType)
+        internal Customizer(Customizer parent, Configuration config, Type ownerType)
         {
             this.parent = parent;
-            this.config = parent.Config;
+            this.config = config;
             this.ownerType = ownerType;
         }
 

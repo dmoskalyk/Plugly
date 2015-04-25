@@ -22,5 +22,16 @@ namespace Plugly.Tests.Data
             this.Country = "Imaginationland";
             this.City = "South Park";
         }
+
+        public void InvokeProtectedMethod()
+        {
+            SetValues("country", "city");
+        }
+
+        protected virtual void SetValues(string country, string city)
+        {
+            this.Country = country;
+            this.City = city;
+        }
     }
 }
