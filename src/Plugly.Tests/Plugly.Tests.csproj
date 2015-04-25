@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CustomizeWithTests.cs" />
     <Compile Include="Data\Customer.cs" />
     <Compile Include="MethodOverrideTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
