@@ -52,6 +52,9 @@
     <Compile Include="CustomizerOfT.Protected.cs" />
     <Compile Include="CustomizerOfT.Generic.cs" />
     <Compile Include="DefaultTypeResolver.cs" />
+    <Compile Include="Interceptors\ProtectedInterceptorBase.cs" />
+    <Compile Include="Interceptors\ProtectedInterceptorsOfTAction.cs" />
+    <Compile Include="Interceptors\ProtectedInterceptorsOfTFunc.cs" />
     <Compile Include="LinqHelper.cs" />
     <Compile Include="TypeHelper.cs" />
     <Compile Include="Interceptors\CompositeInterceptor.cs" />

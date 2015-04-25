@@ -22,7 +22,7 @@ namespace Plugly.Tests
             var customer = customizer.CreateInstance<Customer>();
             customer.FirstName = "John";
             customer.LastName = "Doe";
-            customer.GetFullName("{0} {1}{2}").ShouldBe("John Doe!");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("John _Doe!");
             var test = new Customer();
             customer.CopyTo(test, "ny");
             test.FirstName.ShouldBe("Johnny!");
@@ -38,7 +38,7 @@ namespace Plugly.Tests
             var customer = customizer.CreateInstance<Customer>();
             customer.FirstName = "John";
             customer.LastName = "Doe";
-            customer.GetFullName("{0} {1}{2}").ShouldBe("John Doe!");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("John _Doe!");
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(MissingMethodException))]
+        [ExpectedException(typeof(InvalidOperationException))]
         public void ExtendWith_NonPublicTargetMethod()
         {
             customizer.Setup<Customer>()
@@ -185,7 +185,7 @@ namespace Plugly.Tests
         class NonPublicTargetMethodCustomizations
         {
             [Customization]
-            public static string GetMiddleName(Customer customer)
+            public static string PrivateMethod(Customer customer)
             {
                 return "!";
             }

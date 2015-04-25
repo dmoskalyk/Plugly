@@ -12,12 +12,12 @@ namespace Plugly
     {
         public Customizer<TOwner> OverrideGetter<T>(Expression<Func<TOwner, T>> property, Func<TOwner, T> with)
         {
-            config.Add(ownerType, GetPropertyMethod(property, true), with); return this;
+            config.Add<TOwner>(ownerType, GetPropertyMethod(property, true), with); return this;
         }
 
         public Customizer<TOwner> OverrideSetter<T>(Expression<Func<TOwner, T>> property, Action<TOwner, T> with)
         {
-            config.Add(ownerType, GetPropertyMethod(property, false), with); return this;
+            config.Add<TOwner>(ownerType, GetPropertyMethod(property, false), with); return this;
         }
 
         private MethodInfo GetPropertyMethod(LambdaExpression property, bool getter)

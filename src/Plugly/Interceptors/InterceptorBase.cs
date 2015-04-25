@@ -11,8 +11,8 @@ namespace Plugly.Interceptors
     abstract class InterceptorBase<TAction> : IInterceptor
     {
         TAction action;
-
-        public void SetAction(TAction action)
+        
+        public virtual void Initialize(MethodInfo method, TAction action)
         {
             this.action = action;
         }

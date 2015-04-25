@@ -19,7 +19,7 @@ namespace Plugly.Tests.Data
 
         protected virtual string GetMiddleName()
         {
-            return null;
+            return "_";
         }
 
         public virtual void CopyTo(Customer other, string suffix)
@@ -32,6 +32,11 @@ namespace Plugly.Tests.Data
         {
             this.FirstName = "first";
             this.LastName = "last";
+        }
+
+        private string PrivateMethod()
+        {
+            return null;
         }
     }
 }

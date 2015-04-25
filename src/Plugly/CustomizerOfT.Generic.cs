@@ -19,7 +19,7 @@ namespace Plugly
             var methodInfo = ownerType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
             if (methodInfo == null)
                 throw new ArgumentException("Method '" + method + "' not found.", "method");
-            config.AddUntyped<TOwner>(ownerType, methodInfo, with);
+            config.Add<TOwner>(ownerType, methodInfo, with);
             return this;
         }
 
@@ -76,17 +76,27 @@ namespace Plugly
                 else
                 {
                     var targetMethodArgs = args.Skip(1).Select(a => a.ParameterType).ToArray();
-                    var targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public, null, targetMethodArgs, null);
+                    var targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, targetMethodArgs, null);
+                    if (targetMethod == null)
+                        targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.NonPublic, null, targetMethodArgs.Take(targetMethodArgs.Length - 1).ToArray(), null);
+                    
                     if (targetMethod == null)
                         throw new MissingMethodException(string.Format("Cannot find method to customize: {0}({1})", method.Name, string.Join(",", targetMethodArgs.Select(a => a.FullName))));
-                
+
+                    if (!targetMethod.IsVirtual)
+                        throw new InvalidOperationException(string.Format("The method '{0}' cannot be customized because it is not virtual.", method.Name));
+
+                    var isProtectedWithBaseMethod = !targetMethod.IsPublic && args.Length - 1 > targetMethod.GetParameters().Length;
+                    if (isProtectedWithBaseMethod && !TypeHelper.Matches(targetMethod, targetMethodArgs[targetMethodArgs.Length - 1]))
+                        throw new ArgumentException("The last argument of the protected method customization must be a 'Func<>' or 'Action<>' delegate matching the original method signature.");
+
                     if (method.ReturnType != targetMethod.ReturnType)
                         throw new ArgumentException(string.Format("The return type '{1}' of the customization method '{0}' does not match the target method return type '{2}'.", method.Name, method.ReturnType, targetMethod.ReturnType));
                 
-                    var delegateType = (method.ReturnType == typeof(void)) ? 
-                        TypeHelper.GetActionDelegateType(args.Length).MakeGenericType(args.Select(a => a.ParameterType).ToArray()) :
-                        TypeHelper.GetFuncDelegateType(args.Length + 1).MakeGenericType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
-                    config.AddUntyped<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method));
+                    var delegateType = (method.ReturnType == typeof(void)) ?
+                        TypeHelper.GetActionDelegateType(args.Select(a => a.ParameterType).ToArray()) :
+                        TypeHelper.GetFuncDelegateType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
+                    config.Add<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method), isProtectedWithBaseMethod);
                 }
                 customized = true;
             }

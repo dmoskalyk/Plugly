@@ -12,7 +12,7 @@ namespace Plugly.Tests
         public void MethodWithReturnValue_Default()
         {
             var customer = new Customer();
-            customer.GetFullName("{0} {1}{2}").ShouldBe("first last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("first _last");
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace Plugly.Tests
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first _last");
         }
 
         [TestMethod]
@@ -46,7 +46,7 @@ namespace Plugly.Tests
                 ;
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first Last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("Full name: first _Last");
         }
 
         [TestMethod]

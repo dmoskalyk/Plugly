@@ -18,7 +18,7 @@ namespace Plugly.Tests
             ProtectedCustomerExtension.Register(customizer.Setup<Customer>());
 
             var customer = customizer.CreateInstance<Customer>();
-            customer.GetFullName("{0} {1}{2}").ShouldBe("first van last");
+            customer.GetFullName("{0} {1}{2}").ShouldBe("first van _last");
         }
 
         [TestMethod]
@@ -32,6 +32,26 @@ namespace Plugly.Tests
             address.City.ShouldBe("city2");
         }
 
+        [TestMethod]
+        public void ProtectedMethod_UsingExtendWith()
+        {
+            customizer.Setup<Customer>()
+                .ExtendWith<ProtectedCustomerExtension>();
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.GetFullName("{0} {1} {2}").ShouldBe("first middle last");
+        }
+
+        [TestMethod]
+        public void ProtectedMethod_UsingExtendWith_WithBaseMethod()
+        {
+            customizer.Setup<Customer>()
+                .ExtendWith<ProtectedCustomerExtensionWithBaseMethod>();
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.GetFullName("{0} {1} {2}").ShouldBe("first mid_dle last");
+        }
+
         class ProtectedCustomerExtension : Customer
         {
             public static void Register(Customizer<Customer> customizer)
@@ -39,6 +59,21 @@ namespace Plugly.Tests
                 customizer
                     .OverrideProtected<ProtectedCustomerExtension, string>(c => c.GetMiddleName(), c => "van " + c.GetMiddleName())
                     ;
+            }
+
+            [Customization]
+            static string GetMiddleName(Customer customer)
+            {
+                return "middle";
+            }
+        }
+
+        class ProtectedCustomerExtensionWithBaseMethod
+        {
+            [Customization]
+            static string GetMiddleName(Customer customer, Func<string> baseMethod)
+            {
+                return "mid" + baseMethod() + "dle";
             }
         }
 
