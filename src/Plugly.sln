@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugly.Unity", "Plugly.Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugly.Tests", "Plugly.Tests\Plugly.Tests.csproj", "{B68FA3FC-CE28-43A0-9DAA-033EA45FEA43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugly.Performance", "Plugly.Performance\Plugly.Performance.csproj", "{BC967695-E20D-4563-8F5E-3B29DE25AB24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B68FA3FC-CE28-43A0-9DAA-033EA45FEA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B68FA3FC-CE28-43A0-9DAA-033EA45FEA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B68FA3FC-CE28-43A0-9DAA-033EA45FEA43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
