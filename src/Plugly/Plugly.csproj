@@ -44,7 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Customizer.cs" />
+    <Compile Include="CustomizerOfT.cs" />
+    <Compile Include="CustomizerOfT.Override.cs" />
+    <Compile Include="CustomizerOfT.OverrideProtected.cs" />
+    <Compile Include="CustomizerOfT.Untyped.cs" />
     <Compile Include="DefaultTypeResolver.cs" />
+    <Compile Include="LinqHelper.cs" />
+    <Compile Include="TypeHelper.cs" />
     <Compile Include="Interceptors\CompositeInterceptor.cs" />
     <Compile Include="Interceptors\InterceptorBase.cs" />
     <Compile Include="Interceptors\InterceptorsOfTAction.cs" />

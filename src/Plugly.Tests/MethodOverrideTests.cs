@@ -90,9 +90,38 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
+        public void VoidMethod_OverrideUntyped()
+        {
+            var test = new Customer();
+            Action<Customer, Customer, string> customMethod = (o, other, suffix) =>
+            {
+                o.CopyTo(other, suffix + ".");
+                other.FirstName = "pre:" + other.FirstName;
+            };
+            customizer.Setup<Customer>()
+                .Override("CopyTo", customMethod);
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.FirstName = "copied";
+            customer.CopyTo(test, "-suf");
+            test.FirstName.ShouldBe("pre:copied-suf.");
+        }
+
+        [TestMethod]
+        public void MethodWithReturnValue_OverrideUntyped()
+        {
+            Func<Customer, string, string> customMethod = (o, format) => "overridden:" + o.GetFullName(format);
+            customizer.Setup<Customer>()
+                .Override("GetFullName", customMethod);
+
+            var customer = customizer.CreateInstance<Customer>();
+            customer.GetFullName("{0}").ShouldBe("overridden:first");
+        }
+
+        [TestMethod]
         public void ProtectedMethod_Override()
         {
-            ProtectedCustomerMethods.Customize(customizer);
+            ProtectedCustomerMethods.Customize(customizer.Setup<Customer>());
 
             var customer = customizer.CreateInstance<Customer>();
             customer.GetFullName("{0} {1}{2}").ShouldBe("first van last");
@@ -100,9 +129,11 @@ namespace Plugly.Tests
 
         class ProtectedCustomerMethods : Customer
         {
-            public static void Customize(Customizer customizer)
+            public static void Customize(Customizer<Customer> customizer)
             {
-                customizer.Setup<Customer>().Override(c => ((ProtectedCustomerMethods)c).GetMiddleName(), c => "van ");
+                customizer
+                    .OverrideProtected<ProtectedCustomerMethods, string>(c => c.GetMiddleName(), c => "van " + c.GetMiddleName())
+                    ;
             }
         }
     }

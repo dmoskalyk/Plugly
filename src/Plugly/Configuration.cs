@@ -12,7 +12,9 @@ namespace Plugly
     sealed class Configuration
     {
         static IInterceptor[] NoInterceptors = new IInterceptor[0];
-
+        
+        static MethodInfo addMethodInfo = typeof(Configuration).GetMethod("AddInner", BindingFlags.NonPublic | BindingFlags.Instance);
+        
         ConcurrentDictionary<Type, TypeConfiguration> registrations = new ConcurrentDictionary<Type, TypeConfiguration>();
 
         public bool BuildUpAllTypes = false;
@@ -95,7 +97,7 @@ namespace Plugly
                 return null;
         }
 
-        private void Add<TFunc, TInt>(Type type, MethodBase method, TFunc action)
+        private void AddInner<TFunc, TInt>(Type type, MethodBase method, TFunc action)
             where TInt : InterceptorBase<TFunc>, new()
         {
             registrations
@@ -104,86 +106,107 @@ namespace Plugly
                 .SetAction(action);
         }
 
+        public void AddUntyped<TOwner>(Type type, MethodInfo method, Delegate action)
+        {
+            var parametersTypes = method.GetParameters().Select(p => p.ParameterType).ToList();
+            parametersTypes.Insert(0, typeof(TOwner));
+            if (method.ReturnType == typeof(void))
+            {
+                var paramTypesArray = parametersTypes.ToArray();
+                var actionType = TypeHelper.GetActionDelegateType(paramTypesArray.Length).MakeGenericType(paramTypesArray);
+                var interceptorType = TypeHelper.GetActionInterceptorType(paramTypesArray.Length).MakeGenericType(paramTypesArray);
+                addMethodInfo.MakeGenericMethod(actionType, interceptorType).Invoke(this, new object[] { type, method, action });
+            }
+            else
+            {
+                parametersTypes.Add(method.ReturnType);
+                var paramTypesArray = parametersTypes.ToArray();
+                var actionType = TypeHelper.GetFuncDelegateType(paramTypesArray.Length).MakeGenericType(paramTypesArray);
+                var interceptorType = TypeHelper.GetFuncInterceptorType(paramTypesArray.Length).MakeGenericType(paramTypesArray);
+                addMethodInfo.MakeGenericMethod(actionType, interceptorType).Invoke(this, new object[] { type, method, action });
+            }
+        }
+
         #region Func registrations
         
         public void Add<TOwner, TResult>(Type type, MethodBase method, Func<TOwner, TResult> action)
         {
-            Add<Func<TOwner, TResult>, FuncInterceptor<TOwner, TResult>>(type, method, action);
+            AddInner<Func<TOwner, TResult>, FuncInterceptor<TOwner, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, TResult>(Type type, MethodBase method, Func<TOwner, T1, TResult> action)
         {
-            Add<Func<TOwner, T1, TResult>, FuncInterceptor<TOwner, T1, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, TResult>, FuncInterceptor<TOwner, T1, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, TResult>, FuncInterceptor<TOwner, T1, T2, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, TResult>, FuncInterceptor<TOwner, T1, T2, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, TResult>, FuncInterceptor<TOwner, T1, T2, T3, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, TResult>, FuncInterceptor<TOwner, T1, T2, T3, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, TResult>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>(Type type, MethodBase method, Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult> action)
         {
-            Add<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>>(type, method, action);
+            AddInner<Func<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>, FuncInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, TResult>>(type, method, action);
         }
 
         #endregion
@@ -192,82 +215,82 @@ namespace Plugly
 
         public void Add<TOwner>(Type type, MethodBase method, Action<TOwner> action)
         {
-            Add<Action<TOwner>, ActionInterceptor<TOwner>>(type, method, action);
+            AddInner<Action<TOwner>, ActionInterceptor<TOwner>>(type, method, action);
         }
 
         public void Add<TOwner, T1>(Type type, MethodBase method, Action<TOwner, T1> action)
         {
-            Add<Action<TOwner, T1>, ActionInterceptor<TOwner, T1>>(type, method, action);
+            AddInner<Action<TOwner, T1>, ActionInterceptor<TOwner, T1>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2>(Type type, MethodBase method, Action<TOwner, T1, T2> action)
         {
-            Add<Action<TOwner, T1, T2>, ActionInterceptor<TOwner, T1, T2>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2>, ActionInterceptor<TOwner, T1, T2>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3>(Type type, MethodBase method, Action<TOwner, T1, T2, T3> action)
         {
-            Add<Action<TOwner, T1, T2, T3>, ActionInterceptor<TOwner, T1, T2, T3>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3>, ActionInterceptor<TOwner, T1, T2, T3>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4>, ActionInterceptor<TOwner, T1, T2, T3, T4>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4>, ActionInterceptor<TOwner, T1, T2, T3, T4>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>(type, method, action);
         }
 
         public void Add<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Type type, MethodBase method, Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action)
         {
-            Add<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>(type, method, action);
+            AddInner<Action<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>, ActionInterceptor<TOwner, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>>(type, method, action);
         }
 
         #endregion
