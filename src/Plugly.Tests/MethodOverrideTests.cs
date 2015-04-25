@@ -99,7 +99,7 @@ namespace Plugly.Tests
                 other.FirstName = "pre:" + other.FirstName;
             };
             customizer.Setup<Customer>()
-                .Override("CopyTo", customMethod);
+                .OverrideUntyped("CopyTo", customMethod);
 
             var customer = customizer.CreateInstance<Customer>();
             customer.FirstName = "copied";
@@ -112,7 +112,7 @@ namespace Plugly.Tests
         {
             Func<Customer, string, string> customMethod = (o, format) => "overridden:" + o.GetFullName(format);
             customizer.Setup<Customer>()
-                .Override("GetFullName", customMethod);
+                .OverrideUntyped("GetFullName", customMethod);
 
             var customer = customizer.CreateInstance<Customer>();
             customer.GetFullName("{0}").ShouldBe("overridden:first");

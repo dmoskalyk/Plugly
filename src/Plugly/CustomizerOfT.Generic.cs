@@ -9,12 +9,12 @@ namespace Plugly
 {
     public sealed partial class Customizer<TOwner>
     {
-        public Customizer<TOwner> Override(string method, Delegate with)
+        public Customizer<TOwner> OverrideUntyped(string method, Delegate with)
         {
-            return Override(method, null, with);
+            return OverrideUntyped(method, null, with);
         }
 
-        public Customizer<TOwner> Override(string method, Type[] types, Delegate with)
+        public Customizer<TOwner> OverrideUntyped(string method, Type[] types, Delegate with)
         {
             var methodInfo = ownerType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
             if (methodInfo == null)

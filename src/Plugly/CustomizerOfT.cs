@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace Plugly
             return this;
         }
 
-        private System.Reflection.MethodInfo GetMethod(LambdaExpression method)
+        private MethodInfo GetMethod(LambdaExpression method)
         {
             var methodCall = method.Body as MethodCallExpression;
             if (methodCall == null)
