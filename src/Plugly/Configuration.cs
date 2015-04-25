@@ -45,13 +45,13 @@ namespace Plugly
             return true;
         }
 
-        public bool HasRegistrationsFor(Type type)
+        public bool HasCustomizations(Type type)
         {
             TypeConfiguration config;
-            return registrations.TryGetValue(type, out config);
+            return registrations.TryGetValue(type, out config) && config.HasCustomizations();
         }
 
-        public bool HasRegistrationsFor(Type type, MethodInfo method)
+        public bool HasCustomizations(Type type, MethodInfo method)
         {
             return GetInterceptors(type, method).Length > 0;
         }

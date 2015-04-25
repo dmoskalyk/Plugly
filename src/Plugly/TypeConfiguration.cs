@@ -47,5 +47,10 @@ namespace Plugly
             if (!BuildUp.HasValue)
                 BuildUp = config.BuildUp;
         }
+
+        public bool HasCustomizations()
+        {
+            return interceptors.Count > 0 || Mixins.Count > 0 || BuildUp.HasValue;
+        }
     }
 }

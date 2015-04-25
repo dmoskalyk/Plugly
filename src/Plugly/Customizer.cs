@@ -59,7 +59,7 @@ namespace Plugly
 
         public bool IsCustomized(Type type)
         {
-            return config.HasRegistrationsFor(type);
+            return config.HasCustomizations(type);
         }
 
         public bool ShouldBuildUp(Type type)

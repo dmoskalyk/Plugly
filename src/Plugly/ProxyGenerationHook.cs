@@ -26,7 +26,7 @@ namespace Plugly
 
         public bool ShouldInterceptMethod(Type type, MethodInfo methodInfo)
         {
-            return config.HasRegistrationsFor(type, methodInfo);
+            return config.HasCustomizations(type, methodInfo);
         }
     }
 }
