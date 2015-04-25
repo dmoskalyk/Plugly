@@ -15,7 +15,8 @@ namespace Plugly.Unity
         protected override void Initialize()
         {
             this.customizer = new Customizer(new TypeResolver(Container));
-            Context.Strategies.Add(new Strategy(customizer), UnityBuildStage.PreCreation);
+            Context.Strategies.Add(new CreationStrategy(customizer), UnityBuildStage.PreCreation);
+            Context.Strategies.Add(new InitializationStrategy(customizer), UnityBuildStage.Initialization);
             Context.Container.RegisterInstance(customizer);
             Context.Registering += Context_Registering;
         }
@@ -25,11 +26,11 @@ namespace Plugly.Unity
             customizer.RemapType(e.TypeFrom, e.TypeTo);
         }
 
-        sealed class Strategy : BuilderStrategy
+        sealed class CreationStrategy : BuilderStrategy
         {
             Customizer customizer;
 
-            public Strategy(Customizer customizer)
+            public CreationStrategy(Customizer customizer)
             {
                 this.customizer = customizer;
             }
@@ -40,11 +41,28 @@ namespace Plugly.Unity
                 if (!customizer.IsCustomized(type))
                     return;
                 
-                context.Existing = customizer.CreateInstance(type);
+                var instance = customizer.CreateInstance(type, initialize: false);
+                context.Existing = instance;
                 if (customizer.ShouldBuildUp(type))
-                    return;
-                
-                context.BuildComplete = true;
+                    customizer.InitializeInstance(type, instance);
+                else
+                    context.BuildComplete = true;
+            }
+        }
+
+        sealed class InitializationStrategy : BuilderStrategy
+        {
+            Customizer customizer;
+
+            public InitializationStrategy(Customizer customizer)
+            {
+                this.customizer = customizer;
+            }
+
+            public override void PreBuildUp(IBuilderContext context)
+            {
+                var type = context.BuildKey.Type;
+                customizer.InitializeInstance(type, context.Existing);
             }
         }
     }

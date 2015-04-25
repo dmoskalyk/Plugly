@@ -66,18 +66,28 @@ namespace Plugly
                 if (!method.IsStatic || args.Length == 0 || !typeof(TOwner).IsAssignableFrom(args[0].ParameterType))
                     throw new ArgumentException(string.Format("The customization method '{0}' must be static and have the first parameter of type derived from '{1}'.", method.Name, typeof(TOwner).FullName));
 
-                var targetMethodArgs = args.Skip(1).Select(a => a.ParameterType).ToArray();
-                var targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public, null, targetMethodArgs, null);
-                if (targetMethod == null)
-                    throw new MissingMethodException(string.Format("Cannot find method to customize: {0}({1})", method.Name, string.Join(",", targetMethodArgs.Select(a => a.FullName))));
+                if (method.Name == "__init")
+                {
+                    if (args.Length > 1)
+                        throw new ArgumentException("The '__init' method can have only one argument.");
+                    var delegateType = typeof(Action<>).MakeGenericType(args[0].ParameterType);
+                    config.AddInitializer(ownerType, Delegate.CreateDelegate(delegateType, method));
+                }
+                else
+                {
+                    var targetMethodArgs = args.Skip(1).Select(a => a.ParameterType).ToArray();
+                    var targetMethod = ownerType.GetMethod(method.Name, BindingFlags.Instance | BindingFlags.Public, null, targetMethodArgs, null);
+                    if (targetMethod == null)
+                        throw new MissingMethodException(string.Format("Cannot find method to customize: {0}({1})", method.Name, string.Join(",", targetMethodArgs.Select(a => a.FullName))));
                 
-                if (method.ReturnType != targetMethod.ReturnType)
-                    throw new ArgumentException(string.Format("The return type '{1}' of the customization method '{0}' does not match the target method return type '{2}'.", method.Name, method.ReturnType, targetMethod.ReturnType));
+                    if (method.ReturnType != targetMethod.ReturnType)
+                        throw new ArgumentException(string.Format("The return type '{1}' of the customization method '{0}' does not match the target method return type '{2}'.", method.Name, method.ReturnType, targetMethod.ReturnType));
                 
-                var delegateType = (method.ReturnType == typeof(void)) ? 
-                    TypeHelper.GetActionDelegateType(args.Length).MakeGenericType(args.Select(a => a.ParameterType).ToArray()) :
-                    TypeHelper.GetFuncDelegateType(args.Length + 1).MakeGenericType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
-                config.AddUntyped<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method));
+                    var delegateType = (method.ReturnType == typeof(void)) ? 
+                        TypeHelper.GetActionDelegateType(args.Length).MakeGenericType(args.Select(a => a.ParameterType).ToArray()) :
+                        TypeHelper.GetFuncDelegateType(args.Length + 1).MakeGenericType(args.Select(a => a.ParameterType).Concat(new[] { method.ReturnType }).ToArray());
+                    config.AddUntyped<TOwner>(ownerType, targetMethod, Delegate.CreateDelegate(delegateType, method));
+                }
                 customized = true;
             }
             return customized;

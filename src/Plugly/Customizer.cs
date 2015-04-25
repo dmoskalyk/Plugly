@@ -28,17 +28,34 @@ namespace Plugly
             this.generator = new Generator(config);
         }
 
-        public T CreateInstance<T>()
+        public T CreateInstance<T>(bool initialize = true)
         {
-            return (T)CreateInstance(typeof(T));
+            return (T)CreateInstance(typeof(T), initialize);
         }
 
-        public object CreateInstance(Type type)
+        public object CreateInstance(Type type, bool initialize = true)
         {
-            return generator.CreateInstance(type);
+            var instance = generator.CreateInstance(type);
+            if (initialize)
+                InitializeInstance(type, instance);
+            return instance;
         }
 
-        public Customizer BuildUpTypes(bool shouldBuildUp = false)
+        public void InitializeInstance<T>(T instance)
+        {
+            InitializeInstance(typeof(T), instance);
+        }
+        
+        public void InitializeInstance(Type type, object instance)
+        {
+            var list = config.GetInitializers(type);
+            if (list == null)
+                return;
+            for (int i = 0; i < list.Count; i++)
+                list[i].Initialize(instance);
+        }
+
+        public Customizer SetDefaultBuildUp(bool shouldBuildUp = false)
         {
             config.BuildUpAllTypes = shouldBuildUp;
             return this;

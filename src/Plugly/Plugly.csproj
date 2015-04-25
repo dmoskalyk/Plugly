@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Initializer.cs" />
     <Compile Include="CustomizationAttribute.cs" />
     <Compile Include="Customizer.cs" />
     <Compile Include="CustomizerOfT.cs" />

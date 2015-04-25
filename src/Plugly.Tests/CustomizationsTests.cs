@@ -10,7 +10,7 @@ using Shouldly;
 namespace Plugly.Tests
 {
     [TestClass]
-    public class CustomizeWithTests
+    public class CustomizationsTests
     {
         Customizer customizer;
 
@@ -21,7 +21,7 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
-        public void CustomizeWith_Correct()
+        public void ExtendWith_Correct()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<CorrectCustomizations>()
@@ -37,7 +37,7 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
-        public void CustomizeWith_CorrectStatic()
+        public void ExtendWith_CorrectStatic()
         {
             customizer.Setup<Customer>()
                 .ExtendWith(typeof(CorrectStaticCustomizations))
@@ -51,7 +51,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void CustomizeWith_NoAttribute()
+        public void ExtendWith_NoAttribute()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<NoAttributeCustomizations>()
@@ -60,7 +60,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void CustomizeWith_NonStatic()
+        public void ExtendWith_NonStatic()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<NonStaticCustomizations>()
@@ -69,7 +69,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void CustomizeWith_InvalidFirstArgument()
+        public void ExtendWith_InvalidFirstArgument()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<InvalidFirstArgumentCustomizations>()
@@ -78,7 +78,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(MissingMethodException))]
-        public void CustomizeWith_MissingMethod()
+        public void ExtendWith_MissingMethod()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<MissingMethodCustomizations>()
@@ -87,7 +87,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(MissingMethodException))]
-        public void CustomizeWith_ArgumentCountMismatch()
+        public void ExtendWith_ArgumentCountMismatch()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<ArgumentCountMismatchCustomizations>()
@@ -96,7 +96,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(MissingMethodException))]
-        public void CustomizeWith_ArgumentTypeMismatch()
+        public void ExtendWith_ArgumentTypeMismatch()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<ArgumentTypeMismatchCustomizations>()
@@ -105,7 +105,7 @@ namespace Plugly.Tests
 
         [TestMethod]
         [ExpectedException(typeof(MissingMethodException))]
-        public void CustomizeWith_NonPublicTargetMethod()
+        public void ExtendWith_NonPublicTargetMethod()
         {
             customizer.Setup<Customer>()
                 .ExtendWith<NonPublicTargetMethodCustomizations>()

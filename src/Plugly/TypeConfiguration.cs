@@ -12,8 +12,9 @@ namespace Plugly
     sealed class TypeConfiguration
     {
         ConcurrentDictionary<string, IInterceptor[]> interceptors = new ConcurrentDictionary<string, IInterceptor[]>();
-        
+
         public List<object> Mixins = new List<object>();
+        public List<IInitializer> Initializers = new List<IInitializer>();
 
         public bool? BuildUp;
 

@@ -32,6 +32,12 @@ namespace Plugly
             return this;
         }
 
+        public Customizer<TOwner> InitializeWith(Action<TOwner> action)
+        {
+            config.AddInitializer(ownerType, action);
+            return this;
+        }
+
         private System.Reflection.MethodInfo GetMethod(LambdaExpression method)
         {
             var methodCall = method.Body as MethodCallExpression;

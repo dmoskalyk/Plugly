@@ -55,9 +55,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CustomizeWithTests.cs" />
+    <Compile Include="CustomizationsTests.cs" />
     <Compile Include="Data\Address.cs" />
     <Compile Include="Data\Customer.cs" />
+    <Compile Include="InitializationTests.cs" />
     <Compile Include="MethodOverrideTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MixinTests.cs" />

@@ -14,6 +14,7 @@ namespace Plugly
         static IInterceptor[] NoInterceptors = new IInterceptor[0];
         
         static MethodInfo addMethodInfo = typeof(Configuration).GetMethod("AddInner", BindingFlags.NonPublic | BindingFlags.Instance);
+        static MethodInfo addInitializerMethodInfo = typeof(Configuration).GetMethod("AddInitializerInner", BindingFlags.NonPublic | BindingFlags.Instance);
         
         ConcurrentDictionary<Type, TypeConfiguration> registrations = new ConcurrentDictionary<Type, TypeConfiguration>();
 
@@ -79,6 +80,33 @@ namespace Plugly
                 return result;
             else
                 return NoInterceptors;
+        }
+
+        public void AddInitializer(Type type, Delegate initializer)
+        {
+            var t = initializer.GetType().GetGenericArguments()[0];
+            addInitializerMethodInfo.MakeGenericMethod(t).Invoke(this, new object[] { type, initializer });
+        }
+        
+        public void AddInitializer<T>(Type type, Action<T> initializer)
+        {
+            AddInitializerInner<T>(type, initializer);
+        }
+
+        private void AddInitializerInner<T>(Type type, Action<T> initializer)
+        {
+            registrations
+                .GetOrAdd(type, t => new TypeConfiguration())
+                .Initializers.Add(new Initializer<T>(initializer));
+        }
+
+        public IList<IInitializer> GetInitializers(Type type)
+        {
+            TypeConfiguration config;
+            if (registrations.TryGetValue(type, out config))
+                return config.Initializers;
+            else
+                return null;
         }
 
         public void AddMixin(Type type, object mixin)
