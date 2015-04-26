@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Plugly.Unity</id>
+    <version>$version$</version>
+    <title>Plugly.Unity</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/lokiworld/Plugly/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/lokiworld/Plugly</projectUrl>
+    <iconUrl>https://github.com/lokiworld/Plugly/raw/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Plugly integration for Unity Container.</description>
+    <releaseNotes>Initial version.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Unity Castle DynamicProxy plugin mixin</tags>
+    <dependencies>
+      <dependency id="Plugly" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>

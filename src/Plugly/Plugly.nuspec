@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Plugly</id>
+    <version>$version$</version>
+    <title>Plugly</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/lokiworld/Plugly/blob/master/LICENSE.md</licenseUrl>
+    <projectUrl>https://github.com/lokiworld/Plugly</projectUrl>
+    <iconUrl>https://github.com/lokiworld/Plugly/raw/master/icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The way to alter class behavior without inheritance which helps creating non-conflicting software extensions.</description>
+    <releaseNotes>Initial version.</releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>Castle DynamicProxy plugin mixin</tags>
+  </metadata>
+</package>

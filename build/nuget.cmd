@@ -1,0 +1,1 @@
+..\src\.nuget\NuGet.exe %*
