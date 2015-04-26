@@ -7,7 +7,7 @@ The integrations to the most common Inversion-of-Control containers are supporte
 
 ##### Table of contents:
 * [Installation](#installation)
-* [Basic usage](#basic-sage)
+* [Basic usage](#basic-usage)
 * [Advanced example with a mixin](#advanced-example-with-a-mixin)
 * [Integration](#integration)
 * [Performance](#performance)
@@ -139,7 +139,7 @@ customizer.SetDefaultBuildUp(true) // enables dependency injection on all custom
 ```
 ## Performance
 
-The performance impact is very low due to staticly typed customizations. The exact numbers can be obtained by running the **Plugly.Performance** console application included in the solution.
+The performance impact is very low due to staticly typed customizations. The exact numbers can be obtained by running the **Plugly.Performance** console app included in the solution.
 
 ## Copyright
 
