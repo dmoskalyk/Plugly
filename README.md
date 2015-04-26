@@ -5,6 +5,13 @@ The framework is built on top of [Castle.Core](https://github.com/castleproject/
 
 The integrations to the most common Inversion-of-Control containers are supported out of the box.
 
+##### Table of contents:
+* [Installation](#installation)
+* [Basic usage](#basic-sage)
+* [Advanced example with a mixin](#advanced-example-with-a-mixin)
+* [Integration](#integration)
+* [Performance](#performance)
+
 ## Installation
 
 Just install the corresponding NuGet package:
@@ -13,7 +20,7 @@ Just install the corresponding NuGet package:
 
 All assemblies are signed.
 
-## Basic Usage
+## Basic usage
 
 Lets imagine that there is some class representing a customer:
 
@@ -51,7 +58,7 @@ customer.LastName = "Doe";
 Debug.Assert(customer.GetFullName() == "John Doe");
 ```
 
-## Advanced extension with a mixin
+## Advanced example with a mixin
 
 Below is an advanced customization scenario example which also demonstrates the support of mixins and object initializers.
 The following code extends the existing `Customer` class by appending a `MiddleName` property and including it in the output of the `GetFullName` method. Additionally, the following example demonstrates the possibility to add extra initialization of new class instances.
@@ -66,7 +73,8 @@ class MyExtension : IMyExtension
 {
     public string MiddleName { get; set; }
     
-    [Customization] // customization methods must be static, accept the target object as a first argument and be marked with a CustomizationAttribute
+// customization methods must be static, accept the target object as a first argument and be marked with a CustomizationAttribute
+    [Customization]
     static void __init(Customer customer) // '__init' is a special name for object initializer
     {
         customer.FirstName = "noname";
