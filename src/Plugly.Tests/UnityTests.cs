@@ -82,37 +82,8 @@ namespace Plugly.Tests
         public void Unity_NoBuildUp()
         {
             unity.RegisterType<Customer, ExtendedCustomer>();
-            customizer.Setup<Customer>().ExtendWith<Mixin>();
-
-            var customer = unity.Resolve<Customer>();
-            customer.ShouldNotBeOfType<Customer>();
-            customer.ShouldBeAssignableTo<ExtendedCustomer>();
-            customer.ShouldBeAssignableTo<IMixin>();
-            (customer as ExtendedCustomer).Unity.ShouldBe(null);
-        }
-
-        [TestMethod]
-        public void Unity_DefaultBuildUp()
-        {
-            unity.RegisterType<Customer, ExtendedCustomer>();
-            customizer.SetDefaultBuildUp(true)
+            customizer.SetBuildUp(false)
                 .Setup<Customer>()
-                .ExtendWith<Mixin>();
-
-            var customer = unity.Resolve<Customer>();
-            customer.ShouldNotBeOfType<Customer>();
-            customer.ShouldBeAssignableTo<ExtendedCustomer>();
-            customer.ShouldBeAssignableTo<IMixin>();
-            (customer as ExtendedCustomer).Unity.ShouldBe(unity);
-        }
-
-        [TestMethod]
-        public void Unity_DefaultBuildUp_DisabledForType()
-        {
-            unity.RegisterType<Customer, ExtendedCustomer>();
-            customizer.SetDefaultBuildUp(true)
-                .Setup<Customer>()
-                .BuildUp(false)
                 .ExtendWith<Mixin>();
 
             var customer = unity.Resolve<Customer>();
@@ -123,12 +94,11 @@ namespace Plugly.Tests
         }
 
         [TestMethod]
-        public void Unity_NoBuildUp_EnabledForType()
+        public void Unity_BuildUp()
         {
             unity.RegisterType<Customer, ExtendedCustomer>();
-            customizer.SetDefaultBuildUp(false)
+            customizer
                 .Setup<Customer>()
-                .BuildUp(true)
                 .ExtendWith<Mixin>();
 
             var customer = unity.Resolve<Customer>();

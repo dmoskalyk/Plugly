@@ -29,6 +29,12 @@ namespace Plugly
 
         Generator generator;
         internal Configuration config;
+        Dictionary<string, object> extraData = new Dictionary<string,object>();
+
+        public Dictionary<string, object> ExtraData
+        {
+            get { return extraData; }
+        }
 
         public Customizer()
         {
@@ -63,20 +69,9 @@ namespace Plugly
                 list[i].Initialize(instance);
         }
 
-        public Customizer SetDefaultBuildUp(bool shouldBuildUp = false)
-        {
-            config.BuildUpAllTypes = shouldBuildUp;
-            return this;
-        }
-
         public bool IsCustomized(Type type)
         {
             return config.HasCustomizations(type);
-        }
-
-        public bool ShouldBuildUp(Type type)
-        {
-            return config.ShouldBuildUp(type);
         }
 
         public void RemapType(Type from, Type to)

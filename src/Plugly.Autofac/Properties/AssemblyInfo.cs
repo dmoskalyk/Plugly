@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Plugly.Unity")]
+[assembly: AssemblyTitle("Plugly.Autofac")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Dmytro Moskalyk")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("e6124fc2-594b-47fc-ab27-dd38c8224244")]
+[assembly: Guid("87e641d6-7d33-4577-87cb-02b194fa3fd5")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -18,8 +18,6 @@ namespace Plugly
         
         ConcurrentDictionary<Type, TypeConfiguration> registrations = new ConcurrentDictionary<Type, TypeConfiguration>();
 
-        public bool BuildUpAllTypes = false;
-
         public void RemapType(Type from, Type to)
         {
             if (from == to)
@@ -54,22 +52,6 @@ namespace Plugly
         public bool HasCustomizations(Type type, MethodInfo method)
         {
             return GetInterceptors(type, method).Length > 0;
-        }
-
-        public bool ShouldBuildUp(Type type)
-        {
-            TypeConfiguration config;
-            if (registrations.TryGetValue(type, out config) && config.BuildUp.HasValue)
-                return config.BuildUp.Value;
-            else
-                return BuildUpAllTypes;
-        }
-
-        public void SetBuildUp(Type type, bool buildUp)
-        {
-            registrations
-                .GetOrAdd(type, t => new TypeConfiguration())
-                .BuildUp = buildUp;
         }
 
         public IInterceptor[] GetInterceptors(Type type, MethodInfo method)

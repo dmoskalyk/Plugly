@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Unity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
@@ -71,6 +75,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AutofacTests.cs" />
     <Compile Include="CustomizationsTests.cs" />
     <Compile Include="Data\Address.cs" />
     <Compile Include="Data\Customer.cs" />
@@ -85,6 +90,10 @@
     <Compile Include="UnityTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Plugly.Autofac\Plugly.Autofac.csproj">
+      <Project>{2894463c-10cb-4f0f-8c01-ae3e36a840f3}</Project>
+      <Name>Plugly.Autofac</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugly.Unity\Plugly.Unity.csproj">
       <Project>{520c19de-beb1-463d-820a-2e6300b8343f}</Project>
       <Name>Plugly.Unity</Name>

@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BDE25A
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugly.Autofac", "Plugly.Autofac\Plugly.Autofac.csproj", "{2894463C-10CB-4F0F-8C01-AE3E36A840F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC967695-E20D-4563-8F5E-3B29DE25AB24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2894463C-10CB-4F0F-8C01-AE3E36A840F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2894463C-10CB-4F0F-8C01-AE3E36A840F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2894463C-10CB-4F0F-8C01-AE3E36A840F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2894463C-10CB-4F0F-8C01-AE3E36A840F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

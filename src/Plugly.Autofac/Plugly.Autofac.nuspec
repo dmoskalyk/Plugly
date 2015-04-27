@@ -1,18 +1,21 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Plugly</id>
+    <id>Plugly.Autofac</id>
     <version>$version$</version>
-    <title>Plugly</title>
+    <title>Plugly.Autofac</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/lokiworld/Plugly/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/lokiworld/Plugly</projectUrl>
     <iconUrl>https://github.com/lokiworld/Plugly/raw/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>The way to alter class behavior without explicit inheritance which helps creating non-conflicting software extensions.</description>
+    <description>Plugly integration for Autofac.</description>
     <releaseNotes>Initial version.</releaseNotes>
     <copyright>Copyright 2015</copyright>
-    <tags>Castle DynamicProxy plugin mixin</tags>
+    <tags>Autofac Castle DynamicProxy plugin mixin</tags>
+    <dependencies>
+      <dependency id="Plugly" version="$version$" />
+    </dependencies>
   </metadata>
 </package>

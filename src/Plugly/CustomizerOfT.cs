@@ -27,12 +27,6 @@ namespace Plugly
             return parent.Setup<TOther>();
         }
 
-        public Customizer<TTarget> BuildUp(bool shouldBuildUp)
-        {
-            config.SetBuildUp(targetType, shouldBuildUp);
-            return this;
-        }
-
         public Customizer<TTarget> InitializeWith(Action<TTarget> action)
         {
             config.AddInitializer(targetType, action);

@@ -16,8 +16,6 @@ namespace Plugly
         public List<Func<object>> Mixins = new List<Func<object>>();
         public List<IInitializer> Initializers = new List<IInitializer>();
 
-        public bool? BuildUp;
-
         public bool TryGetInterceptors(MethodBase method, out IInterceptor[] result)
         {
             return interceptors.TryGetValue(method.ToString(), out result);
@@ -44,13 +42,11 @@ namespace Plugly
                 });
             }
             Mixins.AddRange(config.Mixins);
-            if (!BuildUp.HasValue)
-                BuildUp = config.BuildUp;
         }
 
         public bool HasCustomizations()
         {
-            return interceptors.Count > 0 || Mixins.Count > 0 || BuildUp.HasValue;
+            return interceptors.Count > 0 || Mixins.Count > 0;
         }
     }
 }

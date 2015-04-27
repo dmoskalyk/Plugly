@@ -18,7 +18,7 @@ namespace Plugly.Unity
 
             var instance = customizer.CreateInstance(type, initialize: false);
             context.Existing = instance;
-            if (customizer.ShouldBuildUp(type))
+            if (customizer.ShouldBuildUp())
                 return;
 
             customizer.InitializeInstance(type, instance);

@@ -116,7 +116,7 @@ For all available features, possibilities and usage examples take a look at the 
 
 ## Integration
 
-### Unity Container
+#### Unity Container
 
 Unity Container integration is enabled by:
 
@@ -131,25 +131,31 @@ container.AddNewExtension<Plugly.Unity.Extension>();
 ```
 3\. Use the customizer
 ```cs
-Customizer.Current.SetDefaultBuildUp(true) // enables dependency injection on all customized classes,
-    .Setup<Customer>().BuildUp(false); // except the Customer class
+Customizer.Current
+    .Setup<Customer>()
+    .ExtendWith<CustomerExtension>();
 ```
 
-### Castle Windsor
+#### Autofac
+
+1\. Install the corresponding NuGet package
+
+	PM> Install-Package Plugly.Autofac
+    
+2\. Enable Plugly customizations on Autofac container
+```cs
+var builder = new ContainerBuilder();
+// configure container
+var container = builder.Build().EnableCustomizations();
+```
+
+#### StructureMap
 
 *Coming soon...*
 
-### StructureMap
+#### Other
 
-*Coming soon...*
-
-### Autofac
-
-*Coming soon...*
-
-### Ninject
-
-*Coming soon...*
+If you need the integration with any other IoC container, just let me know and we will see what can be done.
 
 ## Performance
 
@@ -157,7 +163,7 @@ The performance impact is very low due to staticly typed customizations. The exa
 
 ## Copyright
 
-Copyright © 2015 Dmitry Moskalyk
+Copyright © 2015 Dmytro Moskalyk
 
 ## License
 
