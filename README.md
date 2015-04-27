@@ -3,7 +3,7 @@
 Plugly is a framework to alter behavior of existing .NET classes without a direct inheritance and method overrides.
 The framework is built on top of [Castle.Core](https://github.com/castleproject/Core) library and is using *DynamicProxy* interceptors to extend the methods behavior and mixins to implement additional interfaces and add extra properties to existing classes.
 
-The integrations to the most common Inversion-of-Control containers are supported out of the box.
+The integrations to some popular Inversion-of-Control containers are supported out of the box.
 
 ##### Table of contents:
 * [Installation](#installation)
@@ -134,6 +134,23 @@ container.AddNewExtension<Plugly.Unity.Extension>();
 Customizer.Current.SetDefaultBuildUp(true) // enables dependency injection on all customized classes,
     .Setup<Customer>().BuildUp(false); // except the Customer class
 ```
+
+### Castle Windsor
+
+*Coming soon...*
+
+### StructureMap
+
+*Coming soon...*
+
+### Autofac
+
+*Coming soon...*
+
+### Ninject
+
+*Coming soon...*
+
 ## Performance
 
 The performance impact is very low due to staticly typed customizations. The exact numbers can be obtained by running the **Plugly.Performance** console app included in the solution.
