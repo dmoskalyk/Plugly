@@ -66,6 +66,17 @@ namespace Plugly.Tests
             ext2.PhoneNumber.ShouldNotBe("my number");
         }
 
+        [TestMethod]
+        public void ExtendWith_CombinedMixin()
+        {
+            customizer.Setup<Address>()
+                .ExtendWith<CombinedExtension>();
+
+            var address = customizer.CreateInstance<Address>();
+            address.ShouldBeAssignableTo<IPhoneNumberExtension>();
+            address.ShouldBeAssignableTo<IStreetExtension>();
+        }
+
         class PhoneNumberExtension : IPhoneNumberExtension
         {
             public string PhoneNumber { get; set; }
@@ -98,6 +109,12 @@ namespace Plugly.Tests
         public interface IStreetExtension
         {
             string Street { get; set; }
+        }
+
+        class CombinedExtension : IPhoneNumberExtension, IStreetExtension
+        {
+            public string PhoneNumber { get; set; }
+            public string Street { get; set; }
         }
     }
 }

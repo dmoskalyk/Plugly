@@ -11,17 +11,14 @@ using Plugly.Tests.Data;
 namespace Plugly.Tests
 {
     [TestClass]
-    public class UnityTests
+    public class UnityTests : TestsBase
     {
         IUnityContainer unity;
-        Customizer customizer;
 
-        [TestInitialize]
-        public void TestInitialize()
+        protected override void Initialize()
         {
             unity = new UnityContainer();
             unity.AddNewExtension<Plugly.Unity.Extension>();
-            customizer = unity.Resolve<Customizer>();
         }
 
         [TestMethod]

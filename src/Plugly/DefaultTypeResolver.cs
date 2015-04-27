@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Plugly
 {
-    sealed class DefaultTypeResolver : ITypeResolver
+    public sealed class DefaultTypeResolver : ITypeResolver
     {
         public Type ResolveType(Type type)
         {

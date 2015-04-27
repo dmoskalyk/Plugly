@@ -1,8 +1,10 @@
 ﻿using Castle.DynamicProxy;
 using Plugly.Interceptors;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace Plugly
@@ -15,6 +17,8 @@ namespace Plugly
         InterceptorSelector selector;
         Configuration config;
 
+        ConcurrentDictionary<Type, ProxyFactory> factories = new ConcurrentDictionary<Type, ProxyFactory>();
+
         public Generator(Configuration config)
         {
             this.config = config;
@@ -24,23 +28,37 @@ namespace Plugly
             this.defaultOptions = new ProxyGenerationOptions(hook) { Selector = selector };
         }
 
-        public object CreateInstance(Type type)
+        public void Invalidate(Type type)
         {
-            return proxyGenerator.CreateClassProxy(type, GetOptions(type));
+            ProxyFactory ignored;
+            factories.TryRemove(type, out ignored);
         }
 
-        ProxyGenerationOptions GetOptions(Type type)
+        public object CreateInstance(Type type)
         {
+            return factories.GetOrAdd(type, CreateFactory).Create();
+        }
+
+        public void InitializeProxy(Type type, object proxy)
+        {
+            factories.GetOrAdd(type, CreateFactory).InitProxy(proxy);
+        }
+
+        ProxyFactory CreateFactory(Type type)
+        {
+            ProxyGenerationOptions options;
             var mixins = config.GetMixins(type);
             if (mixins == null || mixins.Count == 0)
-                return defaultOptions;
-
-            var options = new ProxyGenerationOptions(hook) { Selector = selector };
-            for (int i = 0; i < mixins.Count; i++)
             {
-                options.AddMixinInstance(mixins[i]());
+                options = defaultOptions;
             }
-            return options;
+            else
+            {
+                options = new ProxyGenerationOptions(hook) { Selector = selector };
+                for (int i = 0; i < mixins.Count; i++)
+                    options.AddMixinInstance(mixins[i]());
+            }
+            return new ProxyFactory(proxyGenerator, type, options);
         }
     }
 }

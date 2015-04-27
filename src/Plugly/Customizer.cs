@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -8,18 +9,29 @@ namespace Plugly
 {
     public class Customizer
     {
-        Generator generator;
-        Configuration config;
-        ITypeResolver typeResolver;
+        static ICustomizerLocator locator = new SingleCustomizerLocator(new Customizer());
+        static ITypeResolver resolver = new DefaultTypeResolver();
 
-        public Customizer()
-            : this(new DefaultTypeResolver())
+        public static void SetLocator(ICustomizerLocator customizerLocator)
         {
+            Customizer.locator = customizerLocator;
         }
 
-        public Customizer(ITypeResolver typeResolver)
+        public static void SetResolver(ITypeResolver typeResolver)
         {
-            this.typeResolver = typeResolver;
+            Customizer.resolver = typeResolver;
+        }
+
+        public static Customizer Current
+        {
+            get { return locator.GetCurrent(); }
+        }
+
+        Generator generator;
+        internal Configuration config;
+
+        public Customizer()
+        {
             this.config = new Configuration();
             this.generator = new Generator(config);
         }
@@ -69,13 +81,23 @@ namespace Plugly
 
         public void RemapType(Type from, Type to)
         {
+            generator.Invalidate(from);
+            generator.Invalidate(to);
             config.RemapType(from, to);
         }
 
         public Customizer<T> Setup<T>()
             where T : class
         {
-            return new Customizer<T>(this, config, typeResolver.ResolveType(typeof(T)));
+            var targetType = resolver.ResolveType(typeof(T));
+            generator.Invalidate(targetType);
+            return new Customizer<T>(this, config, targetType);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void InitializeProxy<T>(object proxy)
+        {
+            Current.generator.InitializeProxy(typeof(T), proxy);
         }
     }
 }

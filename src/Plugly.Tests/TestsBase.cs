@@ -15,6 +15,13 @@ namespace Plugly.Tests
         public void TestInitialize()
         {
             customizer = new Customizer();
+            Customizer.SetLocator(new SingleCustomizerLocator(customizer));
+            Customizer.SetResolver(new DefaultTypeResolver());
+            Initialize();
+        }
+
+        protected virtual void Initialize()
+        {
         }
     }
 }

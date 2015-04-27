@@ -12,9 +12,13 @@ namespace Plugly.Performance
     {
         static void Main(string[] args)
         {
+            bool warmup = true;
+
             var count = ReadIterationCount();
             var stats = new Stats();
-            var customizer = new Customizer();
+            var customizer = Customizer.Current;
+            if (warmup)
+                customizer.CreateInstance<Address>();
             var watch = Stopwatch.StartNew();
             for (int i = 0; i < count; i++)
             {
@@ -32,6 +36,8 @@ namespace Plugly.Performance
                 .ExtendWith<PhoneNumberExtension>()
                 .ExtendWith<StreetExtension>()
                 ;
+            if (warmup)
+                customizer.CreateInstance<Address>();
 
             var a1 = new Address();
             watch.Restart();

@@ -42,8 +42,7 @@ Notice, that the class is **not sealed** and `GetFullName` method is **virtual**
 Now, we create an extension which alters the behavior of the `GetFullName` method:
 
 ```cs
-Customizer customizer = GetCustomizer(); // this method must return a singleton Customizer instance
-customizer.Setup<Customer>()
+Customizer.Current.Setup<Customer>()
     .Override<string>(c => c.GetFullName(), c => c.FirstName + " " + c.LastName)
     ;
 ```
@@ -51,8 +50,7 @@ customizer.Setup<Customer>()
 After that, the customer instances should be created in the next way:
 
 ```cs
-Customizer customizer = GetCustomizer(); // this method must return a singleton Customizer instance
-var customer = customizer.CreateInstance<Customer>();
+var customer = Customizer.Current.CreateInstance<Customer>();
 customer.FirstName = "John";
 customer.LastName = "Doe";
 Debug.Assert(customer.GetFullName() == "John Doe");
@@ -95,7 +93,7 @@ class MyExtension : IMyExtension
 Then the above extension is plugged-in this way:
 
 ```cs
-GetCustomizer().Setup<Customer>()
+Customizer.Current.Setup<Customer>()
     .Override<string>(c => c.GetFullName(), c => c.FirstName + " " + c.LastName)
     .ExtendWith<MyExtension>()
     .InitializeWith(c => c.LastName = "unknown");
@@ -104,7 +102,7 @@ GetCustomizer().Setup<Customer>()
 And here is the usage example:
 
 ```cs
-var customer = GetCustomizer().CreateInstance<Customer>();
+var customer = Customizer.Current.CreateInstance<Customer>();
 dynamic dynamicCustomer = customer;
 dynamicCustomer.MiddleName = "midname";
 Debug.Assert(customer.GetFullName() == "noname midname unknown");
@@ -133,8 +131,7 @@ container.AddNewExtension<Plugly.Unity.Extension>();
 ```
 3\. Use the customizer
 ```cs
-var customizer = container.Resolve<Customizer>();
-customizer.SetDefaultBuildUp(true) // enables dependency injection on all customized classes,
+Customizer.Current.SetDefaultBuildUp(true) // enables dependency injection on all customized classes,
     .Setup<Customer>().BuildUp(false); // except the Customer class
 ```
 ## Performance
