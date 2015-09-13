@@ -34,6 +34,12 @@ namespace Plugly.Tests.Data
             this.LastName = "last";
         }
 
+        public Customer(string firstName, string lastName)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+        }
+
         private string PrivateMethod()
         {
             return null;

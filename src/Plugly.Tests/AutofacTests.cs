@@ -21,6 +21,7 @@ namespace Plugly.Tests
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<ExtendedCustomer>().As<Customer>();
+            builder.RegisterType<CustomerWrapper>().As<CustomerWrapper>();
             container = builder.Build().EnableCustomizations();
         }
 
@@ -33,6 +34,18 @@ namespace Plugly.Tests
             var customer = container.Resolve<Customer>();
             customer.ShouldNotBeOfType<ExtendedCustomer>();
             customer.ShouldBeAssignableTo<ExtendedCustomer>();
+        }
+
+        [TestMethod]
+        public void Autofac_InjectedConstructor()
+        {
+            customizer.Setup<CustomerWrapper>()
+                .Override<string>(c => c.GetFullName(), (c) => c.GetFullName());
+
+            for (int i = 0; i < 50000; i++)
+            {
+                container.Resolve<CustomerWrapper>();
+            }
         }
 
         public class ExtendedCustomer : Customer

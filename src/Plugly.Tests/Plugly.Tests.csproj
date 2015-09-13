@@ -76,9 +76,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AutofacTests.cs" />
+    <Compile Include="ConstructorsTests.cs" />
     <Compile Include="CustomizationsTests.cs" />
     <Compile Include="Data\Address.cs" />
     <Compile Include="Data\Customer.cs" />
+    <Compile Include="Data\CustomerWrapper.cs" />
     <Compile Include="InitializationTests.cs" />
     <Compile Include="MethodOverrideTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

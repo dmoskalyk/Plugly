@@ -18,6 +18,7 @@ namespace Plugly.Tests
         protected override void Initialize()
         {
             unity = new UnityContainer();
+            unity.RegisterType<Customer, Customer>(new InjectionConstructor());
             unity.AddNewExtension<Plugly.Unity.Extension>();
         }
 
@@ -106,6 +107,30 @@ namespace Plugly.Tests
             customer.ShouldBeAssignableTo<ExtendedCustomer>();
             customer.ShouldBeAssignableTo<IMixin>();
             (customer as ExtendedCustomer).Unity.ShouldBe(unity);
+        }
+
+        [TestMethod]
+        public void Unity_InjectedConstructor()
+        {
+            unity.RegisterType<Customer, Customer>(new InjectionConstructor("f", "l"));
+            customizer
+                .Setup<Customer>()
+                .ExtendWith<Mixin>();
+
+            var customer = unity.Resolve<Customer>();
+            customer.FirstName.ShouldBe("f");
+            customer.LastName.ShouldBe("l");
+        }
+
+        [TestMethod]
+        public void Unity_InjectedConstructor_AutoWireUp()
+        {
+            customizer
+                .Setup<CustomerWrapper>()
+                .ExtendWith<Mixin>();
+
+            var wrapper = unity.Resolve<CustomerWrapper>();
+            wrapper.GetFullName().ShouldBe("first/last");
         }
 
         class Mixin : IMixin

@@ -34,9 +34,9 @@ namespace Plugly
             factories.TryRemove(type, out ignored);
         }
 
-        public object CreateInstance(Type type)
+        public object CreateInstance(Type type, ConstructionParameters parameters)
         {
-            return factories.GetOrAdd(type, CreateFactory).Create();
+            return factories.GetOrAdd(type, CreateFactory).Create(parameters);
         }
 
         public void InitializeProxy(Type type, object proxy)

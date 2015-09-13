@@ -42,14 +42,14 @@ namespace Plugly
             this.generator = new Generator(config);
         }
 
-        public T CreateInstance<T>(bool initialize = true)
+        public T CreateInstance<T>(ConstructionParameters parameters = null, bool initialize = true)
         {
-            return (T)CreateInstance(typeof(T), initialize);
+            return (T)CreateInstance(typeof(T), parameters, initialize);
         }
 
-        public object CreateInstance(Type type, bool initialize = true)
+        public object CreateInstance(Type type, ConstructionParameters parameters = null, bool initialize = true)
         {
-            var instance = generator.CreateInstance(type);
+            var instance = generator.CreateInstance(type, parameters);
             if (initialize)
                 InitializeInstance(type, instance);
             return instance;

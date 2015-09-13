@@ -16,13 +16,22 @@ namespace Plugly.Unity
             if (!customizer.IsCustomized(type))
                 return;
 
-            var instance = customizer.CreateInstance(type, initialize: false);
+            var instance = customizer.CreateInstance(type, parameters: GetParams(context), initialize: false);
             context.Existing = instance;
             if (customizer.ShouldBuildUp())
                 return;
 
             customizer.InitializeInstance(type, instance);
             context.BuildComplete = true;
+        }
+
+        ConstructionParameters GetParams(IBuilderContext context)
+        {
+            var ctorSelector = context.Policies.Get<IConstructorSelectorPolicy>(context.BuildKey);
+            var selectedCtor = ctorSelector.SelectConstructor(context, context.Policies);
+            var types = selectedCtor.Constructor.GetParameters().Select(p => p.ParameterType).ToArray();
+            var values = selectedCtor.GetParameterResolvers().Select(p => new Func<object>(() => p.Resolve(context))).ToArray();
+            return new ConstructionParameters(types, values);
         }
     }
 }

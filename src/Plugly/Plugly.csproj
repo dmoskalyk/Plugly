@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConstructionParameters.cs" />
     <Compile Include="CustomizerOfT.Properties.cs" />
     <Compile Include="ICustomizerLocator.cs" />
     <Compile Include="Initializer.cs" />
