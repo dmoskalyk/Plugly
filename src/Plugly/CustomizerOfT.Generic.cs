@@ -9,26 +9,60 @@ namespace Plugly
 {
     public sealed partial class Customizer<TTarget>
     {
+        /// <summary>
+        /// Overrides the public method with the specified name. In case of multiple method overloads, use <see cref="OverrideUntyped(string, Type[], Delegate)"/> method instead.
+        /// </summary>
+        /// <param name="method">The method name.</param>
+        /// <param name="with">The delegate to override with.</param>
+        /// <returns>Returns self customizer instance.</returns>
         public Customizer<TTarget> OverrideUntyped(string method, Delegate with)
         {
             return OverrideUntyped(method, null, with);
         }
 
+        /// <summary>
+        /// Overrides the public method with the specified name and argument types.
+        /// </summary>
+        /// <param name="method">The method name.</param>
+        /// <param name="types">The method arguments types.</param>
+        /// <param name="with">The delegate to override with.</param>
+        /// <returns>Returns self customizer instance.</returns>
+        /// <exception cref="System.ArgumentException">Method not found.</exception>
         public Customizer<TTarget> OverrideUntyped(string method, Type[] types, Delegate with)
         {
-            var methodInfo = targetType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
+            var methodInfo = types != null ?
+                targetType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public, null, types, null) :
+                targetType.GetMethod(method, BindingFlags.Instance | BindingFlags.Public);
             if (methodInfo == null)
                 throw new ArgumentException("Method '" + method + "' not found.", "method");
             config.Add<TTarget>(targetType, methodInfo, with);
             return this;
         }
 
+        /// <summary>
+        /// Extends the target type with the specified extension.
+        /// Extension type may be a mixin, contain customization methods or both.
+        /// </summary>
+        /// <typeparam name="TExtension">The type of the extension.</typeparam>
+        /// <returns>Returns self customizer instance.</returns>
+        /// <exception cref="System.ArgumentException">
+        /// The provided type must contain at least one method marked with 'CustomizationAttribute' or implement at least one interface with at least one property.
+        /// </exception>
         public Customizer<TTarget> ExtendWith<TExtension>()
             where TExtension : class
         {
             return ExtendWith(typeof(TExtension));
         }
 
+        /// <summary>
+        /// Extends the target type with the specified extension.
+        /// Extension type may be a mixin, contain customization methods or both.
+        /// </summary>
+        /// <param name="extension">The type of the extension.</param>
+        /// <returns>Returns self customizer instance.</returns>
+        /// <exception cref="System.ArgumentException">
+        /// The provided type must contain at least one method marked with 'CustomizationAttribute' or implement at least one interface with at least one property.
+        /// </exception>
         public Customizer<TTarget> ExtendWith(Type extension)
         {
             if (!extension.IsAbstract && extension.GetConstructor(Type.EmptyTypes) != null)

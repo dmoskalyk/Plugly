@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Plugly
 {
+    /// <summary>
+    /// An API to register customizations for the specified target type.
+    /// </summary>
+    /// <typeparam name="TTarget">The type to customize.</typeparam>
     public sealed partial class Customizer<TTarget>
     {
         Customizer parent;
@@ -21,12 +25,22 @@ namespace Plugly
             this.targetType = targetType;
         }
 
+        /// <summary>
+        /// Gets a customizer for another type to be customized.
+        /// </summary>
+        /// <typeparam name="TOther">The type of the another type.</typeparam>
+        /// <returns>Returns a customizer for the specified type.</returns>
         public Customizer<TOther> Setup<TOther>()
             where TOther : class
         {
             return parent.Setup<TOther>();
         }
 
+        /// <summary>
+        /// Registers an action which is used to initialize each new instance of the specified type.
+        /// </summary>
+        /// <param name="action">The initialization action.</param>
+        /// <returns>Returns self instance.</returns>
         public Customizer<TTarget> InitializeWith(Action<TTarget> action)
         {
             config.AddInitializer(targetType, action);

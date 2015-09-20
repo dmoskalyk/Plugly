@@ -10,21 +10,49 @@ namespace Plugly
 {
     public sealed partial class Customizer<TTarget>
     {
+        /// <summary>
+        /// Registers an overrides of the public property getter.
+        /// </summary>
+        /// <typeparam name="T">The type of the property return value.</typeparam>
+        /// <param name="property">The property access expression.</param>
+        /// <param name="with">The override function which takes the target as the argument and returns the property value.</param>
+        /// <returns>Returns self instance.</returns>
         public Customizer<TTarget> OverrideGetter<T>(Expression<Func<TTarget, T>> property, Func<TTarget, T> with)
         {
             config.Add<TTarget>(targetType, GetPropertyMethod(property, true), with); return this;
         }
 
+        /// <summary>
+        /// Registers an overrides of the public property setter.
+        /// </summary>
+        /// <typeparam name="T">The type of the property return value.</typeparam>
+        /// <param name="property">The property access expression.</param>
+        /// <param name="with">The override action which takes the target as the first argument and the new property value as the second one.</param>
+        /// <returns>Returns self instance.</returns>
         public Customizer<TTarget> OverrideSetter<T>(Expression<Func<TTarget, T>> property, Action<TTarget, T> with)
         {
             config.Add<TTarget>(targetType, GetPropertyMethod(property, false), with); return this;
         }
 
+        /// <summary>
+        /// Registers an overrides of the protected property getter.
+        /// </summary>
+        /// <typeparam name="T">The type of the property return value.</typeparam>
+        /// <param name="property">The property name.</param>
+        /// <param name="with">The override function which takes the target as the argument, the original property getter function as the second and returns the property value.</param>
+        /// <returns>Returns self instance.</returns>
         public Customizer<TTarget> OverrideProtectedGetter<T>(string property, Func<TTarget, Func<T>, T> with)
         {
             config.Add<TTarget>(targetType, GetProtectedPropertyMethod(property, true), with, isProtectedWithBaseMethod: true); return this;
         }
 
+        /// <summary>
+        /// Registers an overrides of the protected property setter.
+        /// </summary>
+        /// <typeparam name="T">The type of the property return value.</typeparam>
+        /// <param name="property">The property name.</param>
+        /// <param name="with">The override action which takes the target as the argument, the new property value as the second one and the original property setter function as the last argument.</param>
+        /// <returns>Returns self instance.</returns>
         public Customizer<TTarget> OverrideProtectedSetter<T>(string property, Action<TTarget, T, Action<T>> with)
         {
             config.Add<TTarget>(targetType, GetProtectedPropertyMethod(property, false), with, isProtectedWithBaseMethod: true); return this;
